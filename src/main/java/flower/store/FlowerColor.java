@@ -10,4 +10,7 @@ public enum FlowerColor {
     FlowerColor(String code) {
         this.code = code;
     }
+    public String getColor() {
+        return code;
+    }
 }
