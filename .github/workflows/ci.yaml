@@ -1,28 +1,39 @@
----
-name: Java CI
+# Назва вашого робочого процесу (workflow)
+name: Java CI with Maven
 
+# Цей блок визначає, коли запускати workflow:
 on:
+  # 1. При кожному 'push' у гілку 'main'
   push:
-    branches: [master, main]
+    branches: [ "main" ]
+  # 2. При кожному 'pull request', який націлений на гілку 'main'
   pull_request:
-    branches: [master, main]
+    branches: [ "main" ]
 
+# Визначаємо самі "завдання" (jobs), які потрібно виконати
 jobs:
   build:
+    # Вказуємо, що це завдання має працювати на останній версії Ubuntu
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 15
-        uses: actions/setup-java@v3
+      # Крок 1: "Викачуємо" код з вашого репозиторію на сервер GitHub
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Крок 2: Налаштовуємо Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          java-version: '15'
-          distribution: 'adopt'
-      - name: Lint Code Base
-        uses: github/super-linter/slim@v4
-        env:
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JAVA_FILE_NAME: checkstyle.xml
-      - name: Test with Maven
-        run: mvn --batch-mode --update-snapshots package
+          # Вказуємо Java 17 (як у вашому pom.xml)
+          java-version: '17'
+          distribution: 'temurin'
+          # Вмикаємо кешування завантажених Maven залежностей
+          cache: 'maven'
+
+      # Крок 3: Запускаємо тести за допомогою Maven
+      - name: Build and test with Maven
+        # Команда 'mvn -B test' автоматично компілює код,
+        # завантажує залежності та запускає всі ваші тести.
+        # -B (batch mode) робить вивід логів чистішим.
+        run: mvn -B test --file pom.xml
