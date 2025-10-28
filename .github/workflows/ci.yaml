@@ -5,7 +5,7 @@ name: Java CI with Maven
 on:
   # 1. При кожному 'push' у гілку 'main'
   push:
-    branches: [ "main" ]
+    branches: [ "main, mybranch" ]
   # 2. При кожному 'pull request', який націлений на гілку 'main'
   pull_request:
     branches: [ "main" ]
