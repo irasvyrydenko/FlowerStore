@@ -1,4 +1,4 @@
-package com.ucu.edu.ua.lab8;
+package flower.store;
 
 import java.util.List;
 import java.util.UUID;
